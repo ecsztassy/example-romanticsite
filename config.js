@@ -37,7 +37,7 @@ const CONFIG = {
      {
       title: "u + me = 🩷",
       artist: "Olivia Rodrigo",
-      src: "assets/music/Olivia Rodrigo - u + me = 🩷.mp3",
+      src: "assets/music/Olivia Rodrigo - u + me = love.mp3",
       cover: "assets/cover/olivia.jpg"
     },
     {
