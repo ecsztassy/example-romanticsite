@@ -1,0 +1,980 @@
+/* =====================================================================
+   EDIT DI SINI: warna & animasi global. Isi teks/konten diedit di
+   index.html, dan pengaturan (PIN, video, dll) di config.js.
+   ===================================================================== */
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{ font-family:'Quicksand', sans-serif; background:#4A020D; overflow-x:hidden; color: #FFF9F4; }
+body.locked{ overflow:hidden; height:100vh; }
+
+/* ---------- video background ---------- */
+#bgVideo{
+  position:fixed; inset:0; width:100%; height:100%; object-fit:cover; z-index:-1;
+}
+
+
+
+/* ---------- watercolor cloud background ---------- */
+.cloud-bg{ position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; background: rgba(74, 2, 13, 0.45); }
+.cloud-bg span{
+  position:absolute; border-radius:50%; filter:blur(50px); opacity:.3;
+  animation: driftCloud 16s ease-in-out infinite;
+}
+@keyframes driftCloud{
+  0%,100%{ transform:translate(0,0) scale(1); }
+  50%{ transform:translate(24px,-30px) scale(1.08); }
+}
+.heart-deco{ position:absolute; opacity:.5; font-size:1.4rem; color:#fff; user-select:none; pointer-events:none; animation:floatHeart 6s ease-in-out infinite; }
+@keyframes floatHeart{ 0%,100%{ transform:translateY(0) rotate(-4deg);} 50%{ transform:translateY(-14px) rotate(4deg);} }
+
+/* ---------- PRELOADER (wreath mawar berputar) ---------- */
+#preloader{
+  position:fixed; inset:0; z-index:999; display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(160deg, #4A020D 0%, #2A0107 100%);
+  transition:opacity .7s ease, visibility .7s ease;
+}
+#preloader.fade-out{ opacity:0; visibility:hidden; pointer-events:none; }
+.preloader-flower-wreath{ width:120px; height:120px; animation:wreathSpin 8s linear infinite; }
+@keyframes wreathSpin{
+  0%{ transform:rotate(0deg); }
+  100%{ transform:rotate(360deg); }
+}
+.preloader-dots span{ animation:dotBlink 1.2s ease-in-out infinite; }
+.preloader-dots span:nth-child(2){ animation-delay:.2s; }
+.preloader-dots span:nth-child(3){ animation-delay:.4s; }
+@keyframes dotBlink{ 0%,100%{ opacity:.25; } 50%{ opacity:1; } }
+
+/* ---------- lock screen ---------- */
+#lockScreen{
+  position:fixed; inset:0; z-index:50; display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(160deg, #4A020D 0%, #2A0107 100%);
+  transition:opacity .8s ease, visibility .8s ease;
+}
+#lockScreen.fade-out{ opacity:0; visibility:hidden; pointer-events:none; }
+
+/* ---------- envelope screen (setelah PIN benar) ---------- */
+#envelopeScreen{
+  position:fixed; inset:0; z-index:45; display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(160deg, #4A020D 0%, #2A0107 100%);
+  opacity:0; visibility:hidden; pointer-events:none;
+  transition:opacity .7s ease, visibility .7s ease;
+}
+#envelopeScreen.active{ opacity:1; visibility:visible; pointer-events:auto; }
+#envelopeScreen.fade-out{ opacity:0; visibility:hidden; pointer-events:none; }
+
+.envelope{
+  position:relative; width:220px; height:150px; margin:0 auto; cursor:pointer;
+  filter:drop-shadow(0 16px 30px rgba(74,2,13,.5));
+  animation:envWiggle 2.4s ease-in-out infinite;
+  perspective:1000px;
+  --letter-lift: -160px; /* jarak surat naik saat amplop dibuka — diubah per breakpoint di bawah */
+}
+.envelope.open{ animation:none; }
+@keyframes envWiggle{
+  0%,100%{ transform:rotate(0deg); }
+  25%{ transform:rotate(-2deg); }
+  75%{ transform:rotate(2deg); }
+}
+
+/* KANTONG DEPAN */
+.env-front{
+  position:absolute; left:0; right:0; bottom:0; top:0px; z-index:2;
+  background:#7D061A; border-radius:0 0 10px 10px;
+  box-shadow: inset 0 8px 14px -8px rgba(0,0,0,.5);
+}
+
+/* LIPATAN SEGITIGA ATAS */
+.env-flap{
+  position:absolute; top:0; left:0; right:0; height:82px; z-index:3;
+  transform-origin:top center;
+  background:linear-gradient(135deg, #9D0C22, #7D061A);
+  clip-path:polygon(0 0, 100% 0, 50% 100%);
+  box-shadow:0 2px 4px rgba(0,0,0,.15);
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), z-index 0s 0.25s;
+}
+.envelope.open .env-flap{ 
+  transform:rotateX(180deg); 
+  z-index: 1;
+}
+
+/* SEGEL LILIN (WAX SEAL) */
+.wax-seal {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #C5A880 0%, #A28254 100%);
+  border: 2.5px double #FFF9F4;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: 70px;
+  left: calc(50% - 22px);
+  z-index: 4;
+  cursor: pointer;
+  transform: translateY(50%);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.wax-seal:hover {
+  transform: translateY(50%) scale(1.08);
+}
+.envelope.open .wax-seal {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* SURAT PUTIH */
+.env-letter{
+  position:absolute; left:20px; right:20px; top:45px; height:95px; background:#FFF9F4;
+  border-radius:6px; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:1.1rem;
+  color:#5C0612; box-shadow:0 4px 10px rgba(0,0,0,.15); 
+  z-index: 1;
+  transform: translateY(0) scale(1);
+  font-weight: 600;
+  padding: 10px;
+}
+
+/* TRIGGER ANIMASI INTERAKTIF SAAT AMPLOP DIBUKA */
+.envelope.open .env-letter { 
+  animation: openLetterAnimation 1.1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* Keyframes interaksi — pakai var(--letter-lift) supaya SATU animasi ini
+   otomatis proporsional di semua ukuran layar (desktop & mobile), tanpa
+   perlu override transform terpisah yang dulu bentrok sama animation ini. */
+@keyframes openLetterAnimation {
+  0% {
+    transform: translateY(0) scale(1);
+    z-index: 1;
+  }
+  35% {
+    transform: translateY(calc(var(--letter-lift) * 0.375)) scale(1);
+    z-index: 4;
+  }
+  80% {
+    transform: translateY(calc(var(--letter-lift) * 1.03)) scale(1);
+    z-index: 4;
+  }
+  100% {
+    transform: translateY(var(--letter-lift)) scale(1.08);
+    z-index: 4;
+    box-shadow: 0 20px 40px rgba(74,2,13,0.35);
+  }
+}
+
+/* ---------- BLOOM TRANSITION: bunga mekar dari tengah menutupi layar penuh,
+   lalu surut lagi (dipakai lock->amplop dan amplop->dashboard) ---------- */
+#roseSweep{
+  position:fixed; inset:0; z-index:1000; pointer-events:none; overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+  background:radial-gradient(circle at 50% 50%, #9D0C22 0%, #5C0612 55%, #2A0107 100%);
+  clip-path:circle(0% at 50% 50%);
+  transition:clip-path .9s cubic-bezier(.65,0,.35,1);
+}
+#roseSweep.sweep-in{ clip-path:circle(150% at 50% 50%); }
+#roseSweep.sweep-out{ clip-path:circle(0% at 50% 50%); }
+.bloom-rose{
+  position:absolute; opacity:0; --s:0;
+  transform:translate(-50%,-50%) scale(var(--s)) rotate(var(--rot,0deg));
+  transition:opacity .5s ease, transform .6s cubic-bezier(.34,1.56,.64,1);
+  transition-delay:var(--delay,0s);
+}
+#roseSweep.sweep-in .bloom-rose{ opacity:1; --s:1; }
+#roseSweep.sweep-out .bloom-rose{ opacity:0; --s:0; transition-delay:0s; }
+/* PIN dots */
+.dot{
+  width:14px; height:14px; border-radius:50%;
+  border:2px solid rgba(255,249,244,.5);
+  background:transparent;
+  transition:background .2s ease, transform .2s ease;
+  display:inline-block;
+}
+.dot.filled{ background:#FFF9F4; border-color:#FFF9F4; transform:scale(1.15); }
+#dotsRow.shake{ animation:shakeX .5s ease; }
+@keyframes shakeX{
+  0%,100%{ transform:translateX(0); }
+  20%{ transform:translateX(-10px); }
+  40%{ transform:translateX(10px); }
+  60%{ transform:translateX(-8px); }
+  80%{ transform:translateX(8px); }
+}
+
+.keypad-btn{
+  width:64px; height:64px; border-radius:50%; background:#FFF9F4;
+  color:#7D061A; border: 2px solid #7D061A; font-family:'Quicksand',sans-serif; font-weight:700; font-size:1.3rem;
+  display:flex; align-items:center; justify-content:center; box-shadow:0 6px 14px rgba(74,2,13,.2);
+  transition:transform .12s ease, background .12s ease; user-select:none;
+}
+.keypad-btn:active{ transform:scale(.9); background:#FFEAF2; }
+
+/* ---------- rose petal transition (dipakai preloader & unlock, biar konsisten) ---------- */
+#petalLayer{ position:fixed; inset:0; z-index:1000; pointer-events:none; overflow:hidden; }
+.falling-petal{
+
+    position:absolute;
+
+    top:-40px;
+
+    pointer-events:none;
+
+    user-select:none;
+
+    opacity:.95;
+
+    filter:drop-shadow(0 5px 8px rgba(0,0,0,.25));
+
+    animation-name:fallPetal;
+
+    animation-timing-function:linear;
+
+    animation-fill-mode:forwards;
+
+}
+@keyframes fallPetal{
+
+0%{
+
+transform:
+translateY(-40px)
+translateX(0)
+rotate(0deg);
+
+opacity:0;
+
+}
+
+10%{
+
+opacity:1;
+
+}
+
+25%{
+
+transform:
+translateY(25vh)
+translateX(18px)
+rotate(80deg);
+
+}
+
+50%{
+
+transform:
+translateY(50vh)
+translateX(-15px)
+rotate(180deg);
+
+}
+
+75%{
+
+transform:
+translateY(75vh)
+translateX(20px)
+rotate(280deg);
+
+}
+
+100%{
+
+transform:
+translateY(110vh)
+translateX(-25px)
+rotate(360deg);
+
+opacity:0;
+
+}
+
+}
+
+/* ---------- dashboard reveal ---------- */
+#dashboard{ position:relative; z-index:1; opacity:0; transform:scale(.97); transition:opacity .9s ease, transform .9s ease; }
+#dashboard.show{ opacity:1; transform:scale(1); }
+/* setelah animasi reveal selesai, transform dilepas total (bukan cuma scale(1)) —
+   iframe YouTube/Spotify di dalamnya butuh ancestor TANPA transform sama sekali
+   supaya sentuhan di mobile terbaca dengan benar (bug lama di banyak browser mobile). */
+#dashboard.show.settled{ transform:none; }
+
+
+
+/* ---------- polaroid + scratch card ---------- */
+.polaroid-flex-grid{ display:flex; flex-wrap:wrap; justify-content:center; gap:22px; }
+.polaroid{ background:#fff; padding:14px 14px 46px 14px; border-radius:10px; box-shadow:0 16px 30px rgba(92,48,73,.18); width:170px; }
+.scratch-wrap{ position:relative; width:100%; aspect-ratio:1/1; border-radius:4px; overflow:hidden; }
+.scratch-wrap canvas{ position:absolute; inset:0; width:100%; height:100%; cursor:grab; touch-action:none; }
+.photo-under{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:3rem; }
+@media (min-width:480px){
+  .polaroid{ width:190px; padding:16px 16px 48px 16px; }
+  .photo-under{ font-size:3.4rem; }
+}
+@media (min-width:768px){
+  .polaroid{ width:230px; padding:18px 18px 54px 18px; }
+  .photo-under{ font-size:3.8rem; }
+}
+
+/* ---------- photo lightbox ---------- */
+#lightbox{
+  position:fixed; inset:0; z-index:2000;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(42,1,7,.85);
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  opacity:0; visibility:hidden; pointer-events:none;
+  transition:opacity .35s ease, visibility .35s ease;
+}
+#lightbox.active{ opacity:1; visibility:visible; pointer-events:auto; }
+#lightboxContent{
+  position:relative; max-width:90vw; max-height:85vh;
+  transform:scale(.85); transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+}
+#lightbox.active #lightboxContent{ transform:scale(1); }
+#lightboxImg{
+  display:block; max-width:100%; max-height:85vh;
+  border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.5);
+  object-fit:contain;
+}
+#lightboxClose{
+  position:absolute; top:18px; right:22px; z-index:10;
+  width:44px; height:44px; border-radius:50%;
+  background:rgba(255,249,244,.15); border:1.5px solid rgba(255,249,244,.3);
+  color:#FFF9F4; font-size:1.6rem; line-height:1;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:background .2s ease, transform .2s ease;
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+}
+#lightboxClose:hover{ background:rgba(255,249,244,.3); transform:scale(1.1); }
+
+/* revealed photo is clickable */
+.photo-under.revealed{ cursor:pointer; }
+.photo-under.revealed img{
+  width:100%; height:100%; object-fit:cover; border-radius:4px;
+}
+
+/* ---------- music player (custom Spotify-style, menggantikan YouTube) ---------- */
+.player-cover{
+  position:relative; width:100%; aspect-ratio:1/1; max-width:180px; margin:0 auto 14px;
+  border-radius:50%; background:radial-gradient(circle at 35% 30%, #9D0C22, #4A020D 70%);
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 8px 20px rgba(74,2,13,.25); border:3px solid #C5A880;
+  background-size:cover; background-position:center;
+}
+.player-cover-icon{ font-size:2.6rem; }
+.player-cover.spinning{ animation:coverSpin 6s linear infinite; }
+@keyframes coverSpin{ from{ transform:rotate(0deg); } to{ transform:rotate(360deg); } }
+.player-cover-tag{
+  position:absolute; bottom:-10px; left:50%; transform:translateX(-50%);
+  background:#7D061A; color:#FFF9F4; font-size:.65rem; font-weight:700;
+  padding:3px 10px; border-radius:999px; white-space:nowrap; box-shadow:0 3px 8px rgba(0,0,0,.2);
+}
+.player-title{ text-align:center; color:#5C0612; font-weight:700; font-size:1.05rem; margin-top:16px; }
+.player-artist{ text-align:center; color:#7D061A; font-size:.85rem; opacity:.75; margin-top:2px; }
+.player-progress{ display:flex; align-items:center; gap:8px; margin-top:16px; }
+.player-time{ font-size:.7rem; color:#7D061A; min-width:34px; opacity:.8; }
+.player-time:last-child{ text-align:right; }
+.player-seek{
+  flex:1; appearance:none; height:5px; border-radius:999px;
+  background:linear-gradient(to right, #7D061A var(--seek-fill, 0%), #E9D9C4 0);
+  outline:none; cursor:pointer;
+}
+.player-seek::-webkit-slider-thumb{
+  appearance:none; width:13px; height:13px; border-radius:50%; background:#7D061A;
+  border:2px solid #FFF9F4; box-shadow:0 1px 4px rgba(0,0,0,.3); cursor:pointer;
+}
+.player-seek::-moz-range-thumb{
+  width:13px; height:13px; border-radius:50%; background:#7D061A; border:2px solid #FFF9F4; cursor:pointer;
+}
+.player-controls{ display:flex; align-items:center; justify-content:center; gap:22px; margin-top:14px; }
+.player-btn{
+  background:none; border:none; font-size:1.4rem; cursor:pointer; color:#7D061A;
+  transition:transform .15s ease; padding:4px;
+}
+.player-btn:hover{ transform:scale(1.15); }
+.player-btn-play{ font-size:2rem; }
+.player-playlist{ margin-top:20px; border-top:1px dashed #C5A880; padding-top:14px; }
+.playlist-heading{ color:#7D061A; font-weight:700; font-size:.9rem; margin-bottom:8px; }
+#playlistList{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:4px; }
+.playlist-item{
+  display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:14px;
+  cursor:pointer; transition:background .15s ease;
+}
+.playlist-item:hover{ background:#FFF0F5; }
+.playlist-item.active{ background:#FBE4E9; }
+.playlist-num{ color:#C5A880; font-weight:700; font-size:.9rem; width:18px; text-align:center; }
+.playlist-meta{ display:flex; flex-direction:column; line-height:1.25; }
+.playlist-title{ color:#5C0612; font-weight:600; font-size:.85rem; }
+.playlist-item.active .playlist-title{ color:#7D061A; }
+.playlist-artist{ color:#7D061A; opacity:.7; font-size:.72rem; }
+
+/* ---------- voice note bars ---------- */
+.vbars{ display:flex; gap:3px; align-items:flex-end; height:20px; }
+.vbars span{ width:3px; border-radius:2px; background:#7D061A; height:5px; }
+.vbars.playing span{ animation:barBounce 1s ease-in-out infinite; }
+.vbars span:nth-child(1){ animation-delay:0s; } .vbars span:nth-child(2){ animation-delay:.15s; }
+.vbars span:nth-child(3){ animation-delay:.3s; } .vbars span:nth-child(4){ animation-delay:.45s; }
+.vbars span:nth-child(5){ animation-delay:.6s; }
+@keyframes barBounce{ 0%,100%{ height:5px; } 50%{ height:18px; } }
+
+/* ---------- map pins ---------- */
+.map-pin{ position:absolute; font-size:1.4rem; transform:translate(-50%,-100%); cursor:pointer; transition:transform .15s ease; filter:drop-shadow(0 3px 4px rgba(0,0,0,.25)); background:none; border:none; padding:0; }
+.map-pin:hover{ transform:translate(-50%,-100%) scale(1.2); }
+#mapTooltip{ position:absolute; max-width:180px; background:#FFF9F4; color:#5C0612; font-size:.78rem; padding:8px 10px; border-radius:10px; box-shadow:0 8px 18px rgba(74,2,13,.2); transform:translate(-50%,-100%); z-index:10; border: 1px solid #7D061A; }
+
+/* ---------- kartu "Alasan Aku Sayang Kamu" (flip card) ---------- */
+.reason-flip-card{ width:100%; max-width:220px; height:150px; perspective:800px; cursor:pointer; }
+.reason-flip-inner{ position:relative; width:100%; height:100%; transition:transform .6s cubic-bezier(.4,0,.2,1); transform-style:preserve-3d; }
+.reason-flip-inner.flipped{ transform:rotateY(180deg); }
+.reason-face{ position:absolute; inset:0; backface-visibility:hidden; border-radius:16px; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:14px; }
+.reason-front{ background:#7D061A; color:#FFF9F4; border: 2px solid #9D0C22; }
+.reason-front p { color: rgba(255,249,244,0.7); }
+.reason-back{ background:#FFF9F4; color:#5C0612; transform:rotateY(180deg); border:2px solid #7D061A; }
+
+/* ---------- kuis "Seberapa Kenal Kamu" ---------- */
+.quiz-option-btn{
+  background:#FFF9F4; color:#7D061A; border: 1.5px solid #7D061A; font-size:.85rem; font-weight:600; padding:9px 14px;
+  border-radius:999px; text-align:left; width:100%; transition:background .15s ease, transform .1s ease, color .15s ease;
+}
+.quiz-option-btn:hover{ background:#7D061A; color:#FFF9F4; }
+.quiz-option-btn:active{ transform:scale(.97); }
+.game-restart-btn{
+  background:#7D061A; color:#FFF9F4; border: 1px solid #9D0C22; border-radius:999px; font-weight:700; font-size:.85rem;
+  padding:10px 22px; transition:transform .12s ease; box-shadow:0 6px 14px rgba(74,2,13,.3);
+}
+.game-restart-btn:active{ transform:scale(.94); }
+
+
+
+/* ---------- game "Tangkap Hati" ---------- */
+.game-area{
+  position:relative; width:100%; height:220px; border-radius:16px; overflow:hidden;
+  background:linear-gradient(180deg,#FFF0F5,#FFE3EE);
+}
+.game-start-btn{
+  position:absolute; inset:0; margin:auto; width:120px; height:46px; background:#D63B67; color:#fff;
+  border-radius:999px; font-weight:700; font-size:.85rem; box-shadow:0 8px 18px rgba(214,59,103,.3);
+}
+.falling-heart-game{
+  position:absolute; top:-30px; font-size:1.7rem; cursor:pointer; user-select:none;
+  animation-name:fallHeartGame; animation-timing-function:linear; animation-fill-mode:forwards;
+}
+@keyframes fallHeartGame{ from{ transform:translateY(0); } to{ transform:translateY(250px); } }
+.heart-pop{ animation:popHeartGame .3s ease forwards; }
+@keyframes popHeartGame{ to{ transform:scale(1.7); opacity:0; } }
+
+@media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
+
+/* =====================================================================
+   RESPONSIVE — MOBILE
+   ===================================================================== */
+@media (max-width: 640px){
+  /* lock screen keypad: sedikit lebih kecil biar muat rapi + gap lebih rapat */
+  .keypad-btn{ width:58px; height:58px; font-size:1.15rem; }
+  #keypad{ gap:12px !important; }
+  .dot{ width:12px; height:12px; }
+
+/* amplop mobile */
+  .envelope{ width:180px; height:123px; --letter-lift: -125px; }
+  .env-letter{ left:16px; right:16px; top:41px; height:74px; font-size:1.5rem; }
+  .env-front{ top:0px; }
+  .env-flap{ height:67px; }
+
+  /* cloud blobs: perkecil supaya tidak mendominasi layar kecil & tetap ringan */
+  .cloud-bg span{ filter:blur(36px); }
+
+  /* peta kenangan: perbesar area tap pin biar gampang disentuh jari */
+  .map-pin{ font-size:1.6rem; padding:6px; }
+  #mapTooltip{ font-size:.75rem; max-width:150px; }
+
+  /* voice note bar & tombol tetap nyaman disentuh */
+  #voiceBtn{ flex-shrink:0; }
+}
+
+@media (max-width: 380px){
+  .keypad-btn{ width:52px; height:52px; font-size:1.05rem; }
+  #keypad{ gap:10px !important; }
+  .envelope{ width:160px; height:109px; --letter-lift: -110px; }
+  .env-letter{ left:14px; right:14px; top:36px; height:66px; font-size:1.3rem; }
+  .env-front{ top:32px; }
+  .env-flap{ height:59px; }
+}
+
+/* pastikan tap target tetap nyaman di layar sentuh secara umum */
+@media (hover: none) and (pointer: coarse){
+  .keypad-btn, .map-pin, #voiceBtn, .key-num, #keyDelete{ -webkit-tap-highlight-color:transparent; }
+}
+/* ================= LIGHTBOX ================= */
+
+#lightbox{
+    position:fixed;
+    inset:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:rgba(0,0,0,.85);
+    backdrop-filter:blur(8px);
+    z-index:9999;
+
+    opacity:0;
+    visibility:hidden;
+    transition:.3s;
+}
+
+#lightbox.active{
+    opacity:1;
+    visibility:visible;
+}
+
+#lightboxContent{
+    max-width:90vw;
+    max-height:90vh;
+    transform:scale(.8);
+    transition:.3s;
+}
+
+#lightbox.active #lightboxContent{
+    transform:scale(1);
+}
+
+#lightboxImg{
+    max-width:100%;
+    max-height:90vh;
+    border-radius:18px;
+    object-fit:contain;
+    box-shadow:0 20px 50px rgba(0,0,0,.4);
+}
+
+#lightboxClose{
+    position:absolute;
+    top:25px;
+    right:25px;
+    width:45px;
+    height:45px;
+    border:none;
+    border-radius:50%;
+    background:rgba(255,255,255,.2);
+    color:white;
+    font-size:30px;
+    cursor:pointer;
+}
+/*==========================
+DATE
+==========================*/
+
+.date-card{
+
+    margin:auto;
+
+    margin-top:28px;
+
+    width:max-content;
+
+    padding:14px 24px;
+
+    border-radius:18px;
+
+    background:rgba(255,255,255,.08);
+
+    backdrop-filter:blur(12px);
+
+    border:1px solid rgba(255,255,255,.12);
+
+}
+
+#todayDate{
+
+    color:#FFEAF2;
+
+    font-weight:700;
+
+    letter-spacing:1px;
+
+}
+
+#todayClock{
+
+    font-size:1.8rem;
+
+    color:#fff;
+
+    font-weight:bold;
+
+}
+
+/*==========================
+LOVE COUNTER
+==========================*/
+
+.love-counter{
+
+    background:#FFF9F4;
+
+    color:#7D061A;
+
+    border-radius:30px;
+
+    padding:35px;
+
+    text-align:center;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.18);
+
+}
+
+.love-counter h2{
+
+    font-size:28px;
+
+    margin-bottom:25px;
+
+    font-family:"Dancing Script";
+
+}
+
+.counter-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:15px;
+
+}
+
+.counter-grid div{
+
+    background:#FFEAF2;
+
+    padding:20px;
+
+    border-radius:18px;
+
+}
+
+.counter-grid span{
+
+    display:block;
+
+    font-size:38px;
+
+    font-weight:bold;
+
+}
+
+.counter-grid small{
+
+    color:#777;
+
+}
+
+@media(max-width:700px){
+
+.counter-grid{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+}
+.music-btn{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    width:55px;
+    height:55px;
+    border:none;
+    border-radius:50%;
+    background:#7D061A;
+    color:#fff;
+    font-size:24px;
+    cursor:pointer;
+    z-index:999;
+    box-shadow:0 8px 20px rgba(0,0,0,.25);
+}
+.typing-cursor{
+    display:inline-block;
+    width:2px;
+    margin-left:2px;
+    background:#7D061A;
+    animation:blinkCursor .8s infinite;
+}
+
+@keyframes blinkCursor{
+    0%,50%{
+        opacity:1;
+    }
+    51%,100%{
+        opacity:0;
+    }
+}
+#musicToggle{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+
+    width:58px;
+    height:58px;
+
+    border:none;
+    border-radius:50%;
+
+    background:rgba(125,6,26,.85);
+    color:#fff;
+    font-size:24px;
+
+    display:none;          /* awalnya disembunyikan */
+    justify-content:center;
+    align-items:center;
+
+    cursor:pointer;
+
+    z-index:99999;
+
+    backdrop-filter:blur(10px);
+    box-shadow:0 8px 20px rgba(0,0,0,.3);
+}
+
+#musicToggle.show{
+    display:flex;
+}
+/* =============================
+   OUR JOURNEY
+============================= */
+
+.journey-progress{
+
+    width:100%;
+    height:16px;
+
+    border-radius:999px;
+
+    overflow:hidden;
+
+    background:#F7D7E3;
+
+}
+
+#journeyBar{
+
+    width:0%;
+
+    height:100%;
+
+    border-radius:999px;
+
+    background:linear-gradient(90deg,#FF5E8A,#D63B67);
+
+    transition:width 2s ease;
+
+}
+
+.journey-labels{
+
+    margin-top:12px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    color:#7D061A;
+
+    font-size:.85rem;
+
+}
+
+#journeyText{
+
+    font-size:18px;
+
+}
+.floating-heart{
+    position:fixed;
+    pointer-events:none;
+    z-index:9999;
+    font-size:20px;
+    animation:heartFloat .9s ease-out forwards;
+}
+@media(max-width:768px){
+
+    .floating-heart{
+
+        font-size:28px;
+
+        animation-duration:1.2s;
+
+    }
+
+}
+
+@keyframes heartFloat{
+
+0%{
+    transform:translate(-50%,-50%) scale(.3);
+    opacity:0;
+}
+
+20%{
+    opacity:1;
+}
+
+100%{
+    transform:
+        translate(-50%,-120px)
+        scale(1.8)
+        rotate(30deg);
+
+    opacity:0;
+}
+
+}
+/* ===========================
+   EASTER EGG KUCING
+=========================== */
+
+#catEasterEgg{
+    position:fixed;
+    bottom:16px;
+    left:-140px;
+
+    font-size:72px;
+    z-index:9998;
+
+    pointer-events:none;
+
+    transition:left 10s linear;
+}
+
+#catBubble{
+    position:fixed;
+    bottom:105px;
+    left:50%;
+    transform:translateX(-50%);
+
+    z-index:9999;
+
+    opacity:0;
+    visibility:hidden;
+
+    transition:.35s ease;
+}
+
+#catBubble.show{
+    opacity:1;
+    visibility:visible;
+}
+
+.cat-bubble-content{
+    background:rgba(255,249,244,.96);
+    color:#5C0612;
+
+    padding:14px 18px;
+    border-radius:20px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.18);
+
+    text-align:center;
+    min-width:220px;
+
+    border:2px solid #FFD6E4;
+}
+
+.cat-bubble-title{
+    font-weight:700;
+    margin-bottom:4px;
+}
+
+.cat-bubble-text{
+    font-size:.92rem;
+    line-height:1.4;
+}
+
+@media(max-width:640px){
+
+    #catEasterEgg{
+        font-size:58px;
+        bottom:12px;
+    }
+
+    #catBubble{
+        bottom:92px;
+        width:calc(100vw - 40px);
+        max-width:300px;
+    }
+
+}
+@media(max-width:768px){
+
+section{
+
+    padding-left:18px;
+    padding-right:18px;
+
+}
+
+.counter-grid{
+
+    grid-template-columns:repeat(2,1fr);
+
+}
+
+.polaroid{
+
+    width:150px;
+
+}
+
+.reason-flip-card{
+
+    max-width:100%;
+
+}
+
+.game-area{
+
+    height:180px;
+
+}
+
+.love-counter{
+
+    padding:22px;
+
+}
+
+#journeyText{
+
+    font-size:15px;
+
+}
+
+}
+@media(max-width:380px){
+
+.polaroid{
+
+    width:130px;
+
+}
+
+.counter-grid span{
+
+    font-size:28px;
+
+}
+
+.music-btn,
+#musicToggle{
+
+    width:50px;
+    height:50px;
+    font-size:20px;
+
+}
+
+#todayClock{
+
+    font-size:1.4rem;
+
+}
+
+}

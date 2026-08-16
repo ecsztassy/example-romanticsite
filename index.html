@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Favorite Person 💗</title>
+
+<!-- GANTI DI SINI: preview link kalau dikirim lewat WhatsApp/Instagram/dll -->
+<meta property="og:title" content="Ada kejutan spesial untukmu 💌">
+<meta property="og:description" content="Buka dan ketuk untuk lihat kenangan kita 🌹">
+<meta property="og:type" content="website">
+<meta name="description" content="Sekumpulan kenangan kecil, lagu, dan foto yang aku simpan khusus untukmu.">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          blush:   { 50:'#FFF7FA', 100:'#FFEAF2', 200:'#FFD3E4', 300:'#FFB4CE', 400:'#FF8FB1', 500:'#F76A94' },
+          rose:    { 400:'#E8547C', 500:'#D63B67', 600:'#B72C54' },
+          plum:    '#5C3049',
+          gold:    '#F4C95D',
+          cream:   '#FFF9F4'
+        },
+        fontFamily: {
+          script: ['"Dancing Script"', 'cursive'],
+          display: ['"Playfair Display"', 'serif'],
+          body: ['"Quicksand"', 'sans-serif']
+        }
+      }
+    }
+  }
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital@1&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.9.2/confetti.browser.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="locked">
+
+<!-- GANTI DI SINI: nama file video background (taruh video.mp4 di folder yang sama) -->
+<video id="bgVideo" autoplay muted loop playsinline>
+  <source src="video.mp4" type="video/mp4">
+</video>
+
+
+<!-- ================= PRELOADER (wreath mawar berputar) ================= -->
+<div id="preloader">
+  <div class="text-center">
+    <div class="mb-6 flex justify-center">
+      <svg class="preloader-flower-wreath" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="38" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="2" />
+        <text x="50" y="18" font-size="14" text-anchor="middle">🌹</text>
+        <text x="74" y="28" font-size="14" text-anchor="middle">💮</text>
+        <text x="84" y="52" font-size="14" text-anchor="middle">🌸</text>
+        <text x="74" y="76" font-size="14" text-anchor="middle">🌷</text>
+        <text x="50" y="90" font-size="14" text-anchor="middle">🌹</text>
+        <text x="26" y="76" font-size="14" text-anchor="middle">💮</text>
+        <text x="16" y="52" font-size="14" text-anchor="middle">🌸</text>
+        <text x="26" y="28" font-size="14" text-anchor="middle">🌷</text>
+      </svg>
+    </div>
+    <p class="font-script text-3xl text-rose-100">memuat kenangan<span class="preloader-dots"><span>.</span><span>.</span><span>.</span></span></p>
+    <p class="text-xs text-rose-200/50 tracking-widest mt-2 uppercase font-body">LOADING</p>
+  </div>
+</div>
+
+<!-- ================= LOCK SCREEN ================= -->
+<div id="lockScreen">
+  <div class="cloud-bg">
+    <span style="width:340px;height:340px;background:rgba(157,12,34,0.15);top:-80px;left:-60px;"></span>
+    <span style="width:280px;height:280px;background:rgba(92,6,18,0.2);bottom:-60px;right:-40px;animation-delay:2s;"></span>
+    <span style="width:220px;height:220px;background:rgba(157,12,34,0.1);top:40%;right:10%;animation-delay:4s;"></span>
+    <span class="absolute text-6xl text-rose-100/30 select-none pointer-events-none" style="top: 10%; right: 15%; transform: rotate(-15deg);">🌙</span>
+    <span class="heart-deco" style="top:12%;left:12%;">❤️</span>
+    <span class="heart-deco" style="top:25%;right:25%;animation-delay:1s;">❤️</span>
+    <span class="heart-deco" style="bottom:16%;left:20%;animation-delay:2.5s;">❤️</span>
+    <span class="heart-deco" style="bottom:24%;right:22%;animation-delay:3.5s;">❤️</span>
+  </div>
+
+  <div class="relative z-10 text-center px-6 w-full max-w-xs">
+    <!-- Heart Padlock Icon -->
+    <div class="mb-4 flex justify-center">
+      <svg class="w-14 h-14" viewBox="0 0 60 60" fill="none">
+        <path d="M30 20C23 11 15 16 15 24C15 34 30 46 30 46C30 46 45 34 45 24C45 16 37 11 30 20Z" fill="#9D0C22" stroke="#FFF9F4" stroke-width="2" />
+        <path d="M23 23V18C23 13.5 26.5 10 30 10C33.5 10 37 13.5 37 18V23" stroke="#FFF9F4" stroke-width="3" stroke-linecap="round" />
+        <circle cx="30" cy="28" r="3" fill="#FFF9F4" />
+        <rect x="29" y="30" width="2" height="6" rx="1" fill="#FFF9F4" />
+      </svg>
+    </div>
+
+    <!-- From / For Names -->
+    <p class="text-xs text-rose-200/60 uppercase tracking-widest font-body mb-1" id="lockNamesLabel">From: Nathan &middot; For: Rara</p>
+    <h1 class="font-script text-4xl text-rose-100 mb-1">HAPPY BIRTHDAY</h1>
+    <p class="text-rose-200/50 text-xs mb-8">Masukkan kode rahasia untuk masuk</p>
+
+    <div id="dotsRow" class="flex gap-4 justify-center mb-10">
+      <span class="dot" data-dot="0"></span>
+      <span class="dot" data-dot="1"></span>
+      <span class="dot" data-dot="2"></span>
+      <span class="dot" data-dot="3"></span>
+    </div>
+
+    <div id="keypad" class="grid grid-cols-3 gap-4 justify-items-center mx-auto">
+      <button class="keypad-btn key-num" data-num="1">1</button>
+      <button class="keypad-btn key-num" data-num="2">2</button>
+      <button class="keypad-btn key-num" data-num="3">3</button>
+      <button class="keypad-btn key-num" data-num="4">4</button>
+      <button class="keypad-btn key-num" data-num="5">5</button>
+      <button class="keypad-btn key-num" data-num="6">6</button>
+      <button class="keypad-btn key-num" data-num="7">7</button>
+      <button class="keypad-btn key-num" data-num="8">8</button>
+      <button class="keypad-btn key-num" data-num="9">9</button>
+      <div></div>
+      <button class="keypad-btn key-num" data-num="0">0</button>
+      <button class="keypad-btn" id="keyDelete">⌫</button>
+    </div>
+    <p class="text-xs text-rose-200/40 mt-6">Hint: Your birthday month & date 💕</p>
+  </div>
+</div>
+
+<!-- ================= ENVELOPE SCREEN (muncul setelah PIN benar) ================= -->
+<div id="envelopeScreen">
+  <div class="cloud-bg">
+    <span style="width:300px;height:300px;background:rgba(157,12,34,0.15);top:-90px;right:-60px;"></span>
+    <span style="width:240px;height:240px;background:rgba(92,6,18,0.2);bottom:-60px;left:-40px;animation-delay:2s;"></span>
+    <span class="heart-deco" style="top:16%;left:16%;">❤️</span>
+    <span class="heart-deco" style="bottom:20%;right:18%;animation-delay:2s;">❤️</span>
+  </div>
+  <div class="relative z-10 text-center px-6">
+    <p class="font-script text-3xl text-rose-100 mb-8">Ada sesuatu untukmu...</p>
+    <div class="envelope" id="envelope">
+      <div class="env-letter">
+        <span class="text-xs uppercase tracking-widest text-rose-900/60 font-body" id="letterSender">From: Nathan</span>
+        <span class="text-3xl my-1">💌</span>
+        <span class="text-xs uppercase tracking-widest text-rose-900/60 font-body" id="letterRecipient">For: Rara</span>
+      </div>
+      <div class="env-front"></div>
+      <div class="env-flap"></div>
+      <div class="wax-seal" id="waxSeal">
+        <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="#FFF9F4" stroke-width="1.5">
+          <path d="M12 2C8 2 6 5 6 8C6 11 8 13 10 14.5L10 22L14 22L14 14.5C16 13 18 11 18 8C18 5 16 2 12 2Z" />
+          <circle cx="12" cy="7" r="3" fill="#FFF9F4" />
+        </svg>
+      </div>
+    </div>
+    <p class="text-sm text-rose-200/60 mt-10" id="envelopeHint">Ketuk amplop atau segel untuk membuka ✨</p>
+  </div>
+</div>
+
+<div id="roseSweep"></div>
+<div id="petalLayer"></div>
+
+<!-- ================= MAIN DASHBOARD ================= -->
+ 
+<div id="dashboard" class="min-h-screen text-[#FFF9F4] pb-20 relative overflow-hidden">
+  <div class="cloud-bg" style="z-index:0;"></div>
+
+
+  <!-- Header -->
+<header class="relative z-10 text-center pt-12 md:pt-16 pb-10 px-6">
+
+    <h1 class="font-script text-4xl sm:text-5xl md:text-7xl text-rose-200">
+        Happy Birthday! A little surprise made with love. 💗
+    </h1>
+
+    <p class="italic text-rose-100/70 mt-3 max-w-md mx-auto">
+        Sekumpulan kenangan kecil, lagu, dan foto yang aku simpan khusus untukmu 🤍
+    </p>
+
+    <div class="date-card mt-8">
+
+        <p id="todayDate"></p>
+
+        <p id="todayClock"></p>
+
+    </div>
+
+</header>
+  <!-- Message + bouquet -->
+  <section class="relative z-10 max-w-3xl mx-auto px-6 mt-14">
+    <div class="relative bg-[#FFF9F4] text-[#5C0612] rounded-3xl shadow-xl p-6 sm:p-8 md:p-10 border border-[#C5A880]/30">
+      <div class="absolute -top-5 -left-3 text-3xl sm:text-5xl select-none">🌷</div>
+      <div class="absolute -top-6 left-8 sm:left-10 text-2xl sm:text-4xl select-none rotate-12">🌸</div>
+      <div class="absolute -top-5 right-1 sm:right-2 text-3xl sm:text-5xl select-none">🌹</div>
+      <p class="leading-relaxed text-[1.05rem]">
+    <span id="romanticMessageText"></span>
+    <span class="typing-cursor">|</span>
+</p>
+      <p class="font-script text-2xl text-[#7D061A] mt-5 text-right" id="messageSignature">— untukmu, selalu 💌</p>
+    </div>
+  </section>
+  <!-- Collage grid -->
+  <section class="relative z-10 max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-6">
+
+    <!-- Music Player (menggantikan YouTube) -->
+    <div class="relative z-10 md:col-span-4 flex justify-center">
+      <div class="w-full max-w-md bg-[#FFF9F4] rounded-3xl p-5 shadow-xl md:rotate-[-1deg] border border-[#C5A880]/30">
+        <p class="text-center text-[#7D061A] font-semibold text-sm mb-4">Your Favorite Song 🎵</p>
+
+        <div class="music-player">
+          <div class="player-cover" id="playerCover">
+          </div>
+
+          <p class="player-title" id="playerTitle">&nbsp;</p>
+          <p class="player-artist" id="playerArtist">&nbsp;</p>
+
+          <div class="player-progress">
+            <span class="player-time" id="playerCurrentTime">00:00</span>
+            <input type="range" id="playerSeek" class="player-seek" value="0" min="0" max="100" step="0.1">
+            <span class="player-time" id="playerDuration">00:00</span>
+          </div>
+
+          <div class="player-controls">
+            <button id="playerPrev" class="player-btn" aria-label="Lagu sebelumnya">⏮</button>
+            <button id="playerPlay" class="player-btn player-btn-play" aria-label="Putar">▶️</button>
+            <button id="playerNext" class="player-btn" aria-label="Lagu berikutnya">⏭</button>
+          </div>
+
+          <audio id="playerAudio" preload="metadata"></audio>
+        </div>
+
+        <div class="player-playlist">
+          <p class="playlist-heading">♡ Playlist</p>
+          <ul id="playlistList"></ul>
+        </div>
+      </div>
+    </div>
+
+  </section>
+  
+
+  <!-- Polaroid scratch cards -->
+  <section class="relative z-10 max-w-5xl mx-auto px-6 mt-12">
+    <p class="text-center text-rose-200/70 text-sm mb-6">✨ Gosok tiap polaroid buat buka fotonya ✨</p>
+    <div class="polaroid-flex-grid relative" id="polaroidGrid">
+
+      <div class="polaroid rotate-[-3deg]">
+        <div class="scratch-wrap">
+          <div class="photo-under" data-photo-index="0">📷</div>
+          <canvas class="scratch-canvas"></canvas>
+        </div>
+        <p class="text-center font-script text-lg text-rose-500 mt-2">Momen 1</p>
+      </div>
+      <div class="polaroid rotate-[2deg]">
+        <div class="scratch-wrap">
+          <div class="photo-under" data-photo-index="1">📷</div>
+          <canvas class="scratch-canvas"></canvas>
+        </div>
+        <p class="text-center font-script text-lg text-rose-500 mt-2">Momen 2</p>
+      </div>
+      <div class="polaroid rotate-[-2deg]">
+        <div class="scratch-wrap">
+          <div class="photo-under" data-photo-index="2">📷</div>
+          <canvas class="scratch-canvas"></canvas>
+        </div>
+        <p class="text-center font-script text-lg text-rose-500 mt-2">Momen 3</p>
+      </div>
+      <div class="polaroid rotate-[3deg]">
+        <div class="scratch-wrap">
+          <div class="photo-under" data-photo-index="3">📷</div>
+          <canvas class="scratch-canvas"></canvas>
+        </div>
+        <p class="text-center font-script text-lg text-rose-500 mt-2">Momen 4</p>
+      </div>
+      <div class="polaroid rotate-[-1deg]">
+        <div class="scratch-wrap">
+          <div class="photo-under" data-photo-index="4">📷</div>
+          <canvas class="scratch-canvas"></canvas>
+        </div>
+        <p class="text-center font-script text-lg text-rose-500 mt-2">Momen 5</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="relative z-10 max-w-4xl mx-auto px-6 mt-10">
+
+    <div class="love-counter">
+
+        <h2>❤️ Sudah Bersama ❤️</h2>
+
+        <div class="counter-grid">
+
+            <div>
+                <span id="daysTogether">0</span>
+                <small>Hari</small>
+            </div>
+
+            <div>
+                <span id="hoursTogether">0</span>
+                <small>Jam</small>
+            </div>
+
+            <div>
+                <span id="minutesTogether">0</span>
+                <small>Menit</small>
+            </div>
+
+            <div>
+                <span id="secondsTogether">0</span>
+                <small>Detik</small>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+<section class="relative z-10 max-w-3xl mx-auto px-6 mt-14">
+
+    <div class="bg-[#FFF9F4] rounded-3xl p-8 shadow-xl">
+
+     <h2 class="font-script text-4xl text-center text-[#7D061A]">
+    Countdown to Your Birthday 🎂
+</h2>
+
+       <div class="journey-progress">
+    <div id="journeyBar"></div>
+</div>
+
+<div class="journey-labels">
+
+    <span>Start 💌</span>
+
+    <span>Almost 🎉</span>
+
+    <span>Your Day 🎂</span>
+
+</div>
+        <p id="journeyText" class="mt-6 text-center text-[#5C0612] font-semibold"></p>
+
+    </div>
+
+</section>
+  <!-- Memory map + voice note -->
+  <section class="relative z-10 max-w-5xl mx-auto px-6 mt-10 grid grid-cols-1 md:grid-cols-5 gap-6">
+
+    <!-- Memory map -->
+    <div class="md:col-span-3 relative bg-[#FFF9F4] text-[#5C0612] rounded-3xl p-6 h-64 overflow-hidden shadow-lg border border-[#C5A880]/30">
+      <p class="font-semibold text-[#7D061A] text-sm mb-2">📍 Peta Kenangan Kita</p>
+      <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 220" preserveAspectRatio="none">
+        <path d="M60,150 C120,60 220,180 340,70" fill="none" stroke="#C5A880" stroke-width="3" stroke-dasharray="8 8"/>
+      </svg>
+      <!-- Pin peta dibuat otomatis oleh script.js dari config.js (CONFIG.memories) -->
+      <div id="mapPinsContainer"></div>
+      <div id="mapTooltip" class="hidden"></div>
+    </div>
+
+    <!-- Voice note -->
+    <div class="md:col-span-2 bg-[#FFF9F4] text-[#5C0612] rounded-3xl p-5 shadow-lg flex flex-col justify-center gap-3 border border-[#C5A880]/30">
+      <p class="font-semibold text-[#7D061A] text-sm">🎙️ Voice Note Untukmu</p>
+      <div class="flex items-center gap-3">
+        <button id="voiceBtn" class="w-12 h-12 rounded-full bg-[#7D061A] text-white flex items-center justify-center shadow-md flex-shrink-0">▶</button>
+        <div class="flex-1">
+          <div class="vbars" id="voiceBars">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <p class="text-xs text-[#5C0612]/60 mt-1">Ketuk untuk dengar pesan suara</p>
+        </div>
+      </div>
+      <audio id="voiceAudio" src=""></audio>
+    </div>
+
+  </section>
+
+  <!-- ================= MAIN YUK: kuis, kartu alasan, mini game ================= -->
+  <section class="relative z-10 max-w-5xl mx-auto px-6 mt-16 relative">
+
+
+    <p class="text-center font-script text-3xl text-rose-200 mb-1">Main Yuk 🎀</p>
+    <p class="text-center text-rose-100/60 text-sm mb-8">Sedikit keseruan sebelum kamu pergi</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <!-- Kartu Alasan Aku Sayang Kamu -->
+      <div class="bg-[#FFF9F4] text-[#5C0612] rounded-3xl shadow-lg p-6 flex flex-col items-center text-center border border-[#C5A880]/30">
+        <p class="font-semibold text-[#7D061A] text-sm mb-4">💗 Alasan Aku Sayang Kamu</p>
+        <div class="reason-flip-card" id="reasonCard">
+          <div class="reason-flip-inner" id="reasonFlipInner">
+            <div class="reason-face reason-front">
+              <span class="text-4xl">💌</span>
+              <p class="text-xs mt-2 text-rose-100/70">Tap buat lihat alasan</p>
+            </div>
+            <div class="reason-face reason-back">
+              <p class="font-script text-lg text-[#7D061A]" id="reasonText"></p>
+            </div>
+          </div>
+        </div>
+        <button id="reasonNextBtn" class="mt-4 text-xs text-[#7D061A] underline hover:text-[#9D0C22]">Lihat alasan lain →</button>
+      </div>
+
+      <!-- Kuis Seberapa Kenal Kamu -->
+      <div class="bg-[#FFF9F4] text-[#5C0612] rounded-3xl shadow-lg p-6 flex flex-col border border-[#C5A880]/30" style="min-height:230px;">
+        <p class="font-semibold text-[#7D061A] text-sm mb-4 text-center">🧠 Seberapa Kenal Kamu Sama Aku?</p>
+        <div id="quizBody" class="flex-1 flex flex-col items-center justify-center text-center gap-3">
+          <p class="text-sm text-[#5C0612]/70">Yuk coba tebak, kamu kenal aku seberapa baik? 👀</p>
+          <button id="quizStartBtn" class="game-restart-btn">Mulai Kuis</button>
+        </div>
+      </div>
+
+      <!-- Game Tangkap Hati -->
+      <div class="bg-[#FFF9F4] text-[#5C0612] rounded-3xl shadow-lg p-6 flex flex-col items-center border border-[#C5A880]/30">
+        <p class="font-semibold text-[#7D061A] text-sm mb-1">💗 Tangkap Hati</p>
+        <p class="text-xs text-[#5C0612]/60 mb-3" id="gameStatus">Skor: 0 · Waktu: 30s</p>
+        <div class="game-area border border-[#C5A880]/20" id="gameArea">
+          <button id="gameStartBtn" class="game-start-btn">Mulai ▶</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Cat mascots: Black and White Cats -->
+  <div class="relative z-10 flex justify-center gap-4 mt-20">
+    <!-- Black Cat -->
+    <svg width="90" height="80" viewBox="0 0 90 80">
+      <ellipse cx="45" cy="55" rx="30" ry="22" fill="#2B2B2B"/>
+      <circle cx="30" cy="28" r="18" fill="#2B2B2B"/>
+      <polygon points="18,16 26,10 26,24" fill="#2B2B2B"/>
+      <polygon points="42,16 34,10 34,24" fill="#2B2B2B"/>
+      <circle cx="25" cy="27" r="2.2" fill="#FFF9F4"/>
+      <circle cx="35" cy="27" r="2.2" fill="#FFF9F4"/>
+      <circle cx="25" cy="27" r="1" fill="#7D061A"/>
+      <circle cx="35" cy="27" r="1" fill="#7D061A"/>
+      <path d="M28,33 Q30,35 32,33" stroke="#FFF9F4" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M60,60 Q78,50 74,66" stroke="#2B2B2B" stroke-width="8" fill="none" stroke-linecap="round"/>
+    </svg>
+    <!-- White Cat -->
+    <svg width="90" height="80" viewBox="0 0 90 80">
+      <ellipse cx="45" cy="55" rx="30" ry="22" fill="#FFF9F4"/>
+      <circle cx="60" cy="28" r="18" fill="#FFF9F4"/>
+      <polygon points="48,16 56,10 56,24" fill="#FFF9F4"/>
+      <polygon points="72,16 64,10 64,24" fill="#FFF9F4"/>
+      <circle cx="55" cy="27" r="2.2" fill="#2B2B2B"/>
+      <circle cx="65" cy="27" r="2.2" fill="#2B2B2B"/>
+      <path d="M58,33 Q60,35 62,33" stroke="#2B2B2B" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M30,60 Q12,50 16,66" stroke="#FFF9F4" stroke-width="8" fill="none" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <p class="relative z-10 text-center text-rose-200/30 text-xs mt-4">Dibuat dengan 💗 khusus untukmu</p>
+  <button id="musicToggle" class="music-btn">
+    🔊
+</button>
+</div>
+<!-- ================= LIGHTBOX FOTO ================= -->
+<div id="lightbox">
+    <button id="lightboxClose">&times;</button>
+
+    <div id="lightboxContent">
+        <img id="lightboxImg" src="" alt="Foto Kenangan">
+    </div>
+</div>
+<audio id="bgMusic" loop preload="auto">
+    <source src="honey-bee.mp3" type="audio/mpeg">
+</audio>
+<button id="musicToggle" class="music-btn">
+    🔊
+</button>
+<!-- 🐈 Easter Egg Kucing -->
+<div id="catEasterEgg">🐈</div>
+
+<div id="catBubble">
+  <div class="cat-bubble-content">
+    <div class="cat-bubble-title">🐾 Meow~</div>
+    <div class="cat-bubble-text">
+      Happy Birthday Rara!<br>
+      Aku juga ikut ngucapin ya ❤️
+    </div>
+  </div>
+</div>
+<script src="config.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
