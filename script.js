@@ -757,7 +757,10 @@ function updateBirthdayProgress(){
     document.getElementById("journeyBar").style.width = percent + "%";
 
     const diff = birthday - now;
-    const daysLeft = Math.ceil(diff / 86400000);
+    
+    // Menggunakan Math.floor dan menghitung selisih hari kalender dengan akurat
+    const oneDay = 86400000;
+    const daysLeft = Math.floor(diff / oneDay);
 
     const text = document.getElementById("journeyText");
 
