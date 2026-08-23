@@ -41,6 +41,12 @@ const CONFIG = {
       cover: "assets/cover/olivia.jpg"
     },
     {
+      title: "maggots for brains",
+      artist: "Olivia Rodrigo",
+      src: "assets/music/Olivia Rodrigo - maggots for brains .mp3",
+      cover: "assets/cover/olivia.jpg"
+    },
+    {
       title: "Opalite",
       artist: "Taylor Swift",
       src: "assets/music/Taylor Swift - Opalite .mp3",
