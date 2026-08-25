@@ -742,7 +742,7 @@ function updateBirthdayProgress(){
 
     const birthday = new Date(CONFIG.birthday);
 
-    // mulai progress 30 hari sebelum ulang tahun
+    // Mulai progress 30 hari sebelum ulang tahun
     const start = new Date(birthday);
     start.setDate(start.getDate() - 30);
 
@@ -752,23 +752,24 @@ function updateBirthdayProgress(){
     const current = now - start;
 
     let percent = (current / total) * 100;
-    percent = Math.max(0, Math.min(percent,100));
+    percent = Math.max(0, Math.min(percent, 100));
 
     document.getElementById("journeyBar").style.width = percent + "%";
 
-    const diff = birthday - now;
+    // Normalisasi jam ke 00:00:00 supaya murni menghitung selisih tanggal kalender
+    const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const birthdayDate = new Date(birthday.getFullYear(), birthday.getMonth(), birthday.getDate());
     
-    // Menggunakan Math.floor dan menghitung selisih hari kalender dengan akurat
     const oneDay = 86400000;
-    const daysLeft = Math.floor(diff / oneDay);
+    const diffDays = Math.round((birthdayDate - todayDate) / oneDay);
 
     const text = document.getElementById("journeyText");
 
-    if(daysLeft > 1){
+    if(diffDays > 1){
 
-        text.textContent = `${daysLeft} hari lagi menuju hari spesialmu 🎂`;
+        text.textContent = `${diffDays} hari lagi menuju hari spesialmu 🎂`;
 
-    }else if(daysLeft === 1){
+    }else if(diffDays === 1){
 
         text.textContent = "Besok hari spesialmu ❤️";
 
